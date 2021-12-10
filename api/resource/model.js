@@ -4,12 +4,13 @@ function getResources() {
     return db('resources')
 }
 
-async function newResource(resource) {
-    const [resource_id] = await db('resources').insert(resource);
-    const newResource = await db('resources')
-        .where('resource_id', resource_id)
-        .first()
-    return newResource
+function getById(id) {
+    return db('resources').where('resource_id', id).first()
+}
+
+function newResource(resource) {
+    return db('resources').insert(resource)
+        .then(([id]) => getById(id))
 }
 
 module.exports = {

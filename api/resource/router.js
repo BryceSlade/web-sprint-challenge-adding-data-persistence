@@ -3,21 +3,25 @@ const Resource = require('./model');
 
 const router = express.Router();
 
-router.get('/', (req, res, next) => {
-    Resource.getResources()
-        .then(resources => {
-            res.json(resources)
-        })
-        .catch(next)
+router.get('/', async (req, res, next) => {
+    try {
+        const resources = await Resource.getResources()
+        res.json(resources)
+    }
+    catch (err) {
+        next(err)
+    }
 })
 
-router.post('/', (req, res, next) => {
-    const resource = req.body
-    Resource.newResource(resource)
-        .then(resource => {
-            res.status(201).json(resource)
-        })
-        .catch(next)
+router.post('/', async (req, res, next) => {
+    try {
+        const resource = await Resource.newResource(req.body)
+        res.json(resource)
+    }
+    catch (err) {
+        next(err)
+    }
+    
 })
 
 module.exports = router
