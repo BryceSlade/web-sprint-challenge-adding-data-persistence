@@ -1,15 +1,32 @@
-// const db = require('../../data/dbConfig')
+const db = require('../../data/dbConfig')
 
-// function getProjects() {
-//     return db('projects')
-// }
+async function getProjects() {
+    const projects = await db('projects')
+    return projects.map(project => {
+        return {
+            ...project,
+            project_completed: project.project_completed === 1
+        }
+    })
+}
 
-// async function newProject(project) {
-//     const [project_id] = await db('projects').insert(project)
-//     return getProjects().where({ project_id }).first
-// }
+async function getById(id) {
+    const row = await db('projects')
+        .where('projects_id', id)
+        .first();
 
-// module.exports = {
-//     getProjects,
-//     newProject
-// }
+    return {
+        ...row,
+        project_completed: row.project_completed ? true : false
+    }
+}
+
+async function newProject(project) {
+    const [id] = await db('projects').insert(project)
+    return getById(id)
+}
+
+module.exports = {
+    getProjects,
+    newProject
+}
