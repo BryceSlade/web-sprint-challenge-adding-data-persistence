@@ -12,7 +12,7 @@ async function getProjects() {
 
 async function getById(id) {
     const row = await db('projects')
-        .where('projects_id', id)
+        .where('project_id', id)
         .first();
 
     return {
